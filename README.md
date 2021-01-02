@@ -1,33 +1,7 @@
 ﻿# e-Paper  
-waveshare electronics
-![waveshare_logo.png](waveshare_logo.png)
 
-## 中文:  
-Jetson Nano、Raspberry Pi、Arduino、STM32例程
-* RaspberryPi_JetsonNano  
-    > C
-    > Python 
-* Arduino:  
-    > Arduino UNO  
-* STM32:  
-    > STM32F103ZET6 
-    
-更多资料请在官网上搜索:  
-http://www.waveshare.net
+Originally forked from the [waveshare/e-Paper repository](https://github.com/waveshare/e-Paper).
 
-
-## English:  
-Jetson Nano、Raspberry Pi、Arduino、STM32 Demo:  
-* RaspberryPi_JetsonNano:  
-    > C
-    > Python
-* Arduino:  
-    > Arduino UNO  
-* STM32:  
-    > STM32F103ZET6 
-    
-For more information, please search on the official website:   
-https://www.waveshare.com
-
+This repository has been reduced to work with the [Waveshare](https://www.waveshare.com/) [5.83'' e-Paper display](https://www.waveshare.com/wiki/5.83inch_e-Paper_HAT) on a Raspberry Pi. Support for other displays has been removed completely. Moreover it's meant to support only the C(++) programming language using the [bcm2835 library](https://www.airspayce.com/mikem/bcm2835/) instaed of [Wiring Pi](http://wiringpi.com/).
 
 

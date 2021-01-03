@@ -106,5 +106,5 @@ The API manual for the function, you can download it on our WIKI or request it a
 		- font12CN: 16*21
 		- font24CN: 32*41
         
-    `\lib\E-paper\`: This screen is the ink screen driver function;
+    `\lib\E-paper\`: This screen is the ink screen driver function;  
     `Examples\`: This is the test program for the ink screen. You can see the specific usage method in it.

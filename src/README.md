@@ -1,3 +1,4 @@
+
 ```
 /*****************************************************************************
 * | File      	:   Readme_CN.txt
@@ -42,33 +43,36 @@ Please note which ink screen you purchased.
 Chestnut 1:
 
     ```
-    If you purchased 5.83inch e-paper, then you should remove the comment for the corresponding 39 lines of code, ie:
-        // EPD_5in83_test();
-    changed to:
-        EPD_5in83_test();
+    If you purchased 5.83inch e-paper, then you should remove the comment for the corresponding 39 lines of code, ie:
+        // EPD_5in83_test();
+    changed to:
+        EPD_5in83_test();
     ```
 
-Chestnut 2:
+	Chestnut 2:
 
     ```
-     If you buy a 2.9inch e-paper (B), since the 2.9-inch Type B and Type C are common driver codes,
-     Then you should remove the comment for the corresponding 28 lines of code, ie:
-         // EPD_2in9bc_test();
-     changed to:
-         EPD_2in9bc_test();
+     If you buy a 2.9inch e-paper (B), since the 2.9-inch Type B and Type C are common driver codes,
+     Then you should remove the comment for the corresponding 28 lines of code, ie:
+         // EPD_2in9bc_test();
+     changed to:
+         EPD_2in9bc_test();
     ```
     
-Note: For EPD_1in54_V2_test() and EPD_2in13_V2_test(), please note that the V2 logo is attached to the back of your screen.
+	Note: For EPD_1in54_V2_test() and EPD_2in13_V2_test(), please note that the V2 logo is attached to the back of your screen.
 
-Then you need to execute: 
-make
-compile the program, will generate the executable file: epd
-Run: 
-sudo ./epd
-If you modify the program, you need to execute: 
-make clear
-then:
-make
+	Then you need to execute:
+
+    ```
+    make
+    compile the program, will generate the executable file: epd
+    Run: 
+    sudo ./epd
+    If you modify the program, you need to execute: 
+    make clear
+    then:
+    make
+    ```
 
 4. Directory structure (selection):
 If you use our products frequently, we will be very familiar with our program directory structure. We have a copy of the specific function.

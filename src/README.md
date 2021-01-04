@@ -1,24 +1,12 @@
-
-```
-/*****************************************************************************
-* | File      	:   Readme_CN.txt
-* | Author      :   Waveshare team
-* | Function    :   Help with use
-* | Info        :
-*----------------
-* |	This version:   V1.0
-* | Date        :   2019-07-31
-* | Info        :   Here is an English version of the documentation for your quick use.
-******************************************************************************/
-```
+> Use `make` to build the test `epd` executable.  
+> Test successful build with `sudo ./epd`
 
 This file is to help you use this routine.
-Since our ink screens are getting more and more, it is not convenient for our maintenance, so all the ink screen programs are made into one project.
 A brief description of the use of this project is here:
 
 1. Basic information:  
 This routine has been verified using the e-paper Driver HAT module. 
-You can view the corresponding test routines in the \lib\Examples\ 
+You can view the corresponding test routines in the `\lib\Examples\`
 of the project.
 
 2. Pin connection:  

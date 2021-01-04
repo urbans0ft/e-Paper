@@ -10,7 +10,7 @@ You can view the corresponding test routines in the `\lib\Examples\`
 of the project.
 
 2. Pin connection:  
-Pin connection You can view it in DEV_Config.h in the \lib\Config\ directory, and repeat it here:
+You can view the pin connection in DEV_Config.h in the `\lib\Config\` directory, it's repeated here:
 
     ```
     EPD    =>    Jetson Nano/RPI(BCM)
@@ -25,31 +25,6 @@ Pin connection You can view it in DEV_Config.h in the \lib\Config\ directory, an
     ```
     
 3. Basic use:  
-Since this project is a comprehensive project, you may need to read the following for use:
-You can see the 19 functions that have been annotated in lines 19 through 43 of main.c.
-Please note which ink screen you purchased.  
-Chestnut 1:
-
-    ```
-    If you purchased 5.83inch e-paper, then you should remove the comment for the corresponding 39 lines of code, ie:
-        // EPD_5in83_test();
-    changed to:
-        EPD_5in83_test();
-    ```
-
-	Chestnut 2:
-
-    ```
-     If you buy a 2.9inch e-paper (B), since the 2.9-inch Type B and Type C are common driver codes,
-     Then you should remove the comment for the corresponding 28 lines of code, ie:
-         // EPD_2in9bc_test();
-     changed to:
-         EPD_2in9bc_test();
-    ```
-    
-	Note: For EPD_1in54_V2_test() and EPD_2in13_V2_test(), please note that the V2 logo is attached to the back of your screen.
-
-	Then you need to execute:
 
     ```
     make
@@ -57,14 +32,12 @@ Chestnut 1:
     Run: 
     sudo ./epd
     If you modify the program, you need to execute: 
-    make clear
-    then:
+    make clean
     make
     ```
 
 4. Directory structure (selection):  
-If you use our products frequently, we will be very familiar with our program directory structure. We have a copy of the specific function.
-The API manual for the function, you can download it on our WIKI or request it as an after-sales customer service. Here is a brief introduction:  
+The API manual for the function can be downloaded from the Waveshare Wiki or requested as an after-sales at customer service. Here is a brief introduction:  
 `Config\`: This directory is a hardware interface layer file. You can see many definitions in DEV_Config.c(.h), including:
 	- type of data;
 	- GPIO;

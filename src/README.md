@@ -50,7 +50,7 @@ The API manual for the function can be downloaded from the Waveshare Wiki or req
 			1. Here is the processing of some GPIOs before and after using the ink screen.
 			2. For the PCB with Rev2.1, the entire module will enter low power consumption after DEV_Module_Exit(). After testing, the power consumption is basically 0;
 			3. 
-    `\lib\GUI\`: This directory is some basic image processing functions, in GUI_Paint.c(.h):
+    `\lib\GUI\`: This directory contains some basic image processing functions (see in GUI_Paint.c[.h]):
 	- Common image processing: creating graphics, flipping graphics, mirroring graphics, setting pixels, clearing screens, etc.
 	- Common drawing processing: drawing points, lines, boxes, circles, Chinese characters, English characters, numbers, etc.;
 	- Common time display: Provide a common display time function;

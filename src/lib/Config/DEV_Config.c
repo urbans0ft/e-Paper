@@ -64,7 +64,8 @@ void DEV_SPI_WriteByte(uint8_t Value)
 void DEV_SPI_Write_nByte(uint8_t *pData, uint32_t Len)
 {
 	char rData[Len];
-	bcm2835_spi_transfernb(pData,rData,Len);
+	//! \todo make cast unnecessary
+	bcm2835_spi_transfernb((char*)pData,rData,Len);
 }
 
 /**

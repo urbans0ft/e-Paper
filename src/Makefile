@@ -42,8 +42,8 @@ RPI:RPI_DEV RPI_epd
 JETSON: JETSON_DEV JETSON_epd
 
 TARGET = epd
-CC = gcc
-MSG = -g -O -ffunction-sections -fdata-sections -Wall
+CC = g++
+MSG = -g -O -ffunction-sections -fdata-sections -Wall -fpermissive
 CFLAGS += $(MSG)
 
 RPI_epd:${OBJ_O}

@@ -79,7 +79,7 @@ typedef struct RGB_QUAD {
     UBYTE rgbBlue;               //Blue intensity
     UBYTE rgbGreen;              //Green strength
     UBYTE rgbRed;                //Red intensity
-    UBYTE rgbReversed;           //Reserved value
+    UBYTE rgbReversed;           //Reserved value //! \todo Correct typo
 } __attribute__ ((packed)) BMPRGBQUAD;
 /**************************************** end ***********************************************/
 

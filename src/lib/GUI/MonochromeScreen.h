@@ -16,9 +16,8 @@ class MonochromeScreen
 		MonochromeScreen(DWORD width, DWORD height);
 		~MonochromeScreen();
 		void draw(const MonochromeBitmap& bmp);
+		void print() const;
 		inline const BYTE* getScreenBuffer() const { return _screenBuffer; }
-	private:
-		BYTE reverse(BYTE b);
 };
 // #############################################################################
 #endif // _MONOCHROME_SCREEN_H_

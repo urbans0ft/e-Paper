@@ -2,7 +2,7 @@
 #include "MonochromeScreen.h"
 #include <algorithm>
 #include <iostream>
-
+// ----------------------------------------------
 using std::cout;
 using std::endl;
 // ----------------------------------------------
@@ -20,16 +20,47 @@ MonochromeScreen::~MonochromeScreen()
 // ----------------------------------------------
 void MonochromeScreen::draw(const MonochromeBitmap& bmp)
 {
-	for (DWORD row = 0; row < bmp.getHeight(); row++) {
-		std::copy_n(bmp.getPxData() + bmp.getStride() * row, bmp.getStride(), _screenBuffer + Width * row);
+	const DWORD& bmpHeight = bmp.getHeight();
+	const DWORD& bmpWidth  = bmp.getWidth();
+	const DWORD& bmpStride = bmp.getStride();
+	const BYTE*  bmpPxData = bmp.getPxData();
+
+	// calculate endianness
+	const WORD endianTest = 0x0100; // LE => 00 10 / BE => 01 00
+	// calculate padding **BITS** not bytes!
+	auto  paddingBits       = bmpStride * 8 - bmpWidth;        // num of bits used for padding
+	DWORD whiteningBitMask  = *(BYTE*)&endianTest              // either 0x01 xor 0x00
+		? 0xFFFFFFFF >> (32 - paddingBits)                     // big-endian
+		: __builtin_bswap32(0xFFFFFFFF >> (32 - paddingBits)); // little-endian
+
+	// draw bmp onto the screen row by row
+	for (DWORD row = 0; row < bmpHeight; row++) {
+		std::copy_n(bmpPxData + bmpStride * row, bmpStride, _screenBuffer + Width * row);
+		// whiten padding bits (setting to 1) by grabbing padding **BYTE**
+		DWORD& paddingByte = *(DWORD*)&_screenBuffer[Width * row + bmpStride - 4];
+		paddingByte |= whiteningBitMask;
 	}
 }
 // ----------------------------------------------
-BYTE MonochromeScreen::reverse(BYTE b)
+void MonochromeScreen::print() const
 {
-	b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-	b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
-	b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
-	return b;
+	for (DWORD y = 0; y < Height; y++)
+	{
+		for (DWORD x = 0; x < Width; x++)
+		{
+			for (int px = 0; px < 8; px++)
+			{
+				if(_screenBuffer[Width * y + x] & (0x80 >> px)) // set means WHITE
+				{
+					cout << " ";
+				}
+				else
+				{
+					cout << "X";
+				}
+			}
+		}
+		cout << endl;
+	}
 }
 // ----------------------------------------------

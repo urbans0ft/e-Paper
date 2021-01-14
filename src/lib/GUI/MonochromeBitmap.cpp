@@ -2,10 +2,7 @@
 // ==============================================
 #include <fstream>
 #include <stdexcept>
-
-#include <chrono>
-#include <thread>
-
+#include <iostream>
 // ==============================================
 using namespace std;
 // ==============================================
@@ -29,12 +26,16 @@ MonochromeBitmap::MonochromeBitmap(const std::string path) : _path(path)
 	if (_rgbQuad[0].rgbRed == 0xFF && _rgbQuad[0].rgbGreen == 0xFF && _rgbQuad[0].rgbBlue == 0xFF
 	 && _rgbQuad[1].rgbRed == 0x00 && _rgbQuad[1].rgbGreen == 0x00 && _rgbQuad[1].rgbBlue == 0x00)
 	{
+		cout << "White is _rgbQuad[0]" << endl;
+		cout << "Black is _rgbQuad[1]" << endl;
 		_idxWhite = 0;
 		_idxBlack = 1;
 	}
 	else if (_rgbQuad[1].rgbRed == 0xFF && _rgbQuad[1].rgbGreen == 0xFF && _rgbQuad[1].rgbBlue == 0xFF
 	      && _rgbQuad[0].rgbRed == 0x00 && _rgbQuad[0].rgbGreen == 0x00 && _rgbQuad[0].rgbBlue == 0x00)
 	{
+		cout << "White is _rgbQuad[1]" << endl;
+		cout << "Black is _rgbQuad[0]" << endl;
 		_idxWhite = 1;
 		_idxBlack = 0;
 	}
@@ -42,8 +43,9 @@ MonochromeBitmap::MonochromeBitmap(const std::string path) : _path(path)
 	{
 		throw logic_error("Bitmap's color table is faulty.");
 	}
-	_stride = (((_infoHeader.biWidth + 31) & ~31) >> 3); // bytes (needed) per row
 	_height = _infoHeader.biHeight;
+	_width  = _infoHeader.biWidth;
+	_stride = (((_width + 31) & ~31) >> 3); // bytes (needed) per row
 	// read px data
 	_pxDataSize = _fileHeader.bfSize - _fileHeader.bfOffBits;
 	_pxData = new BYTE[_pxDataSize];

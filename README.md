@@ -25,8 +25,15 @@ Use the (master) _Makefile_ provided in the _src/_ directory. There are other _M
 	make
 	sudo ./epd
 
+To-Dos
+------
+
+- [ ] Move `EPD_5IN83_*` functions to the `MonochromeDisplay` class.
+- [ ] Create a driver class to handle SPI communication.
+- [ ] Create conditional _DEBUG_ output information.
+- [ ] Extend documentation.
+
 Bugs
 ----
 
-- Bitmaps are displayed mirrored. Use [ImageMagick](https://imagemagick.org/index.php) `convert` command line tool to [mirror images](https://askubuntu.com/a/1052902) before displaying them.
 

@@ -127,6 +127,15 @@ static void EPD_5IN83_SendData(UBYTE Data)
     DEV_Digital_Write(EPD_CS_PIN, 1);
 }
 
+static void EPD_5IN83_SendData(UBYTE* pData, uint32_t Len)
+{
+    DEV_Digital_Write(EPD_DC_PIN, 1);
+    DEV_Digital_Write(EPD_CS_PIN, 0);
+    DEV_SPI_Write_nByte(pData, Len);
+    DEV_Digital_Write(EPD_CS_PIN, 1);
+}
+
+
 /******************************************************************************
 function :	Wait until the busy_pin goes LOW
 parameter:
@@ -246,10 +255,11 @@ void EPD_5IN83_Display(UBYTE *Image)
     for (UWORD j = 0; j < Height; j++) {
         for (int i = 0; i < Width; i++) {
 			Data = Image[i + j * Width];
-			for (UBYTE k = 0; k < 4; k++)
+			EPD_5IN83_SendData(table[Data], 4);
+			/*for (UBYTE k = 0; k < 4; k++)
 			{
 				EPD_5IN83_SendData(table[Data][k]);
-			}
+			}*/
             /*Data_Black = ~Image[i + j * Width];
             for(UBYTE k = 0; k < 8; k++) {
                 if(Data_Black & 0x80)

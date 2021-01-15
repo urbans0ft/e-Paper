@@ -221,6 +221,15 @@ void EPD_5IN83_Clear(void)
 		EPD_5IN83_TurnOnDisplay();
 }
 
+UBYTE EPD_5IN83_Reverse(UBYTE b)
+{
+        b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
+        b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+        b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+        return b;
+}
+
+
 /******************************************************************************
 function :	Sends the image buffer in RAM to e-Paper and displays
 parameter:
@@ -234,7 +243,7 @@ void EPD_5IN83_Display(UBYTE *Image)
 
     EPD_5IN83_SendCommand(0x10);
     for (UWORD j = 0; j < Height; j++) {
-        for (UWORD i = 0; i < Width; i++) {
+        for (int i = 0; i < Width; i++) {
             Data_Black = ~Image[i + j * Width];
             for(UBYTE k = 0; k < 8; k++) {
                 if(Data_Black & 0x80)

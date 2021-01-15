@@ -1,0 +1,8 @@
+# ignore hidden files...
+.*
+# ... but this
+!.gitignore
+
+# ignore temp files
+bin/
+epd

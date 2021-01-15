@@ -1,6 +1,9 @@
 ﻿#include <stdlib.h>     //exit()
 #include <signal.h>     //signal()
 #include "EPD_Test.h"   //Examples
+#include "EPD_5in83.h"
+#include "MonochromeBitmap.h"
+#include "MonochromeScreen.h"
 
 void  Handler(int signo)
 {
@@ -21,7 +24,17 @@ int main(void)
         return -1;
     }
 
-    EPD_5in83_test();
+    //EPD_5in83_test();
+	MonochromeBitmap bmp("./pic/hello_world.bmp");
+	MonochromeScreen screen(600, 448);
+	screen.draw(bmp);
+	const BYTE* image = screen.getScreenBuffer();
+    EPD_5IN83_Init();
+    EPD_5IN83_Clear();
+	EPD_5IN83_Display(image);
+	DEV_Delay_ms(2000);
+	
+	
     
     DEV_Module_Exit();
 

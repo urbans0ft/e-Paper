@@ -36,4 +36,7 @@ To-Dos
 Bugs
 ----
 
-
+- [ ] Destructor code is missing (**Memory leaks may occur!**).
+    - [ ] MonochromeBitmap
+    - [ ] MonochromeScreen
+    - [ ] MonochromeDispaly

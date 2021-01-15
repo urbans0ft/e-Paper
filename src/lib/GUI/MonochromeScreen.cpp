@@ -33,9 +33,10 @@ void MonochromeScreen::draw(const MonochromeBitmap& bmp)
 		? 0xFFFFFFFF >> (32 - paddingBits)                     // big-endian
 		: __builtin_bswap32(0xFFFFFFFF >> (32 - paddingBits)); // little-endian
 
+	cout << "Drawing to screen" << endl;
 	// draw bmp onto the screen row by row
 	for (DWORD row = 0; row < bmpHeight; row++) {
-		std::copy_n(bmpPxData + bmpStride * row, bmpStride, _screenBuffer + Width * row);
+		std::copy_n(bmp[bmpHeight - row - 1], bmpStride, _screenBuffer + Width * row);
 		// whiten padding bits (setting to 1) by grabbing padding **BYTE**
 		DWORD& paddingByte = *(DWORD*)&_screenBuffer[Width * row + bmpStride - 4];
 		paddingByte |= whiteningBitMask;

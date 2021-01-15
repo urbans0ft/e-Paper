@@ -49,6 +49,9 @@ MonochromeBitmap::MonochromeBitmap(const std::string path) : _path(path)
 	// read px data
 	_pxDataSize = _fileHeader.bfSize - _fileHeader.bfOffBits;
 	_pxData = new BYTE[_pxDataSize];
+	_pxGrid = new BYTE*[_height];
+	for (DWORD i = 0; i < _height; i++)
+		_pxGrid[i] = &_pxData[i * _stride];
 	bmpStream.read((char*)_pxData, _pxDataSize);
 	cout << bmpStream.gcount() << endl;
 }

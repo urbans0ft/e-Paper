@@ -86,7 +86,7 @@
 ******************************************************************************/
 #include "EPD_5in83.h"
 #include "Debug.h"
-
+#include "MonochromeDisplay.h"
 /******************************************************************************
 function :	Software reset
 parameter:
@@ -126,6 +126,15 @@ static void EPD_5IN83_SendData(UBYTE Data)
     DEV_SPI_WriteByte(Data);
     DEV_Digital_Write(EPD_CS_PIN, 1);
 }
+
+static void EPD_5IN83_SendData(UBYTE* pData, uint32_t Len)
+{
+    DEV_Digital_Write(EPD_DC_PIN, 1);
+    DEV_Digital_Write(EPD_CS_PIN, 0);
+    DEV_SPI_Write_nByte(pData, Len);
+    DEV_Digital_Write(EPD_CS_PIN, 1);
+}
+
 
 /******************************************************************************
 function :	Wait until the busy_pin goes LOW
@@ -236,6 +245,7 @@ parameter:
 ******************************************************************************/
 void EPD_5IN83_Display(UBYTE *Image)
 {
+	const uint8_t (&table)[256][4] = MonochromeDisplay::BYTE_SEND_TABLE;
     UBYTE Data_Black, Data;
     UWORD Width, Height;
     Width = (EPD_5IN83_WIDTH % 8 == 0)? (EPD_5IN83_WIDTH / 8 ): (EPD_5IN83_WIDTH / 8 + 1);
@@ -244,7 +254,13 @@ void EPD_5IN83_Display(UBYTE *Image)
     EPD_5IN83_SendCommand(0x10);
     for (UWORD j = 0; j < Height; j++) {
         for (int i = 0; i < Width; i++) {
-            Data_Black = ~Image[i + j * Width];
+			Data = Image[i + j * Width];
+			EPD_5IN83_SendData(table[Data], 4);
+			/*for (UBYTE k = 0; k < 4; k++)
+			{
+				EPD_5IN83_SendData(table[Data][k]);
+			}*/
+            /*Data_Black = ~Image[i + j * Width];
             for(UBYTE k = 0; k < 8; k++) {
                 if(Data_Black & 0x80)
                     Data = 0x00;
@@ -259,7 +275,7 @@ void EPD_5IN83_Display(UBYTE *Image)
                     Data |= 0x03;
                 Data_Black <<= 1;
                 EPD_5IN83_SendData(Data);
-            }
+            }*/
         }
     }
     EPD_5IN83_TurnOnDisplay();

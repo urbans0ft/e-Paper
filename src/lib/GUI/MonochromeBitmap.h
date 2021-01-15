@@ -88,6 +88,8 @@ class MonochromeBitmap
 		BYTE*            _pxData;
 		//! The size of the plain image data
 		DWORD            _pxDataSize;
+		//! Two-Dim array of the _pxData
+		BYTE**           _pxGrid;
 		//! Index of white in _rqbQuad
 		BYTE             _idxWhite;
 		//! Index of black in _rqbQuad
@@ -109,6 +111,7 @@ class MonochromeBitmap
 		 *  \brief Destruct the object.
 		 */
 		~MonochromeBitmap();
+		inline const BYTE* operator[](DWORD idx) const { return _pxGrid[idx]; }
 		/*!
 		 *  \brief Print the image as ASCII art to stdout.
 		 */

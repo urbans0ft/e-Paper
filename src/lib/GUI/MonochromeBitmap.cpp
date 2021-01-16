@@ -23,6 +23,7 @@ MonochromeBitmap::MonochromeBitmap(const std::string path) : _path(path)
 	{
 		throw invalid_argument(_path + " is not a monochromatic bitmap");
 	}
+	bool flipBits; // 1 is supposed to represent white.
 	if (_rgbQuad[0].rgbRed == 0xFF && _rgbQuad[0].rgbGreen == 0xFF && _rgbQuad[0].rgbBlue == 0xFF
 	 && _rgbQuad[1].rgbRed == 0x00 && _rgbQuad[1].rgbGreen == 0x00 && _rgbQuad[1].rgbBlue == 0x00)
 	{
@@ -30,6 +31,7 @@ MonochromeBitmap::MonochromeBitmap(const std::string path) : _path(path)
 		cout << "Black is _rgbQuad[1]" << endl;
 		_idxWhite = 0;
 		_idxBlack = 1;
+		flipBits = true;
 	}
 	else if (_rgbQuad[1].rgbRed == 0xFF && _rgbQuad[1].rgbGreen == 0xFF && _rgbQuad[1].rgbBlue == 0xFF
 	      && _rgbQuad[0].rgbRed == 0x00 && _rgbQuad[0].rgbGreen == 0x00 && _rgbQuad[0].rgbBlue == 0x00)
@@ -38,6 +40,7 @@ MonochromeBitmap::MonochromeBitmap(const std::string path) : _path(path)
 		cout << "Black is _rgbQuad[0]" << endl;
 		_idxWhite = 1;
 		_idxBlack = 0;
+		flipBits = false;
 	}
 	else
 	{
@@ -53,6 +56,15 @@ MonochromeBitmap::MonochromeBitmap(const std::string path) : _path(path)
 	for (DWORD i = 0; i < _height; i++)
 		_pxGrid[i] = &_pxData[i * _stride];
 	bmpStream.read((char*)_pxData, _pxDataSize);
+	if (flipBits)
+	{
+		cout << "Flipping bits so 1 represents white and 0 black." << endl;
+		for(DWORD i = 0; i < _pxDataSize; i += 4) // flip DWORDs because it's faster
+		{
+			DWORD& flipping = *(DWORD*)&_pxData[i];
+			flipping = ~flipping;
+		}
+	}
 	cout << bmpStream.gcount() << endl;
 }
 // ----------------------------------------------

@@ -14,6 +14,17 @@ class MonochromeDisplay
 		MonochromeDisplay(DWORD width, DWORD height);
 		~MonochromeDisplay();
 		void display(const MonochromeScreen& screen);
+		void clear(void)
+		void display(UBYTE *Image);
+		void init(void);
+		void readBusy(void);
+		void reset(void);
+		void sendCommand(UBYTE Reg);
+		void sendData(UBYTE Data);
+		void sendData(UBYTE* pData, uint32_t Len);
+		void sleep(void);
+		void turnOnDisplay(void);
+
 	public:
 		static constexpr const uint8_t BYTE_SEND_TABLE[256][4]{
 			{ 0x00, 0x00, 0x00, 0x00, }, // 00000000: 00000000 00000000 00000000 00000000

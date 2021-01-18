@@ -4,6 +4,7 @@
 // =============================================================================
 #include "global.h"
 #include "MonochromeScreen.h"
+#include "DisplayCommand.h"
 // =============================================================================
 class MonochromeDisplay
 {
@@ -14,16 +15,16 @@ class MonochromeDisplay
 		MonochromeDisplay(DWORD width, DWORD height);
 		~MonochromeDisplay();
 		void display(const MonochromeScreen& screen);
-		void clear(void)
-		void display(UBYTE *Image);
-		void init(void);
-		void readBusy(void);
-		void reset(void);
-		void sendCommand(UBYTE Reg);
-		void sendData(UBYTE Data);
-		void sendData(UBYTE* pData, uint32_t Len);
-		void sleep(void);
-		void turnOnDisplay(void);
+		void clear();
+		void display(BYTE *Image);
+		void init();
+		void readBusy();
+		void reset();
+		void sendCommand(DisplayCommand Reg);
+		void sendData(BYTE Data);
+		void sendData(BYTE* pData, DWORD Len);
+		void sleep();
+		void turnOnDisplay();
 
 	public:
 		static constexpr const uint8_t BYTE_SEND_TABLE[256][4]{

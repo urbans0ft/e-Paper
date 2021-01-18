@@ -26,7 +26,7 @@ MonochromeDisplay::~MonochromeDisplay()
 function :	Software reset
 parameter:
 ******************************************************************************/
-void MonochromeDisplay::reset(void)
+void MonochromeDisplay::reset()
 {
     DEV_Digital_Write(EPD_RST_PIN, 1);
     DEV_Delay_ms(200);
@@ -41,11 +41,11 @@ function :	send command
 parameter:
      Reg : Command register
 ******************************************************************************/
-void MonochromeDisplay::sendCommand(UBYTE Reg)
+void MonochromeDisplay::sendCommand(DisplayCommand Reg)
 {
     DEV_Digital_Write(EPD_DC_PIN, 0);
     DEV_Digital_Write(EPD_CS_PIN, 0);
-    DEV_SPI_WriteByte(Reg);
+    DEV_SPI_WriteByte(static_cast<BYTE>(Reg));
     DEV_Digital_Write(EPD_CS_PIN, 1);
 }
 
@@ -54,7 +54,7 @@ function :	send data
 parameter:
     Data : Write data
 ******************************************************************************/
-void MonochromeDisplay::sendData(UBYTE Data)
+void MonochromeDisplay::sendData(BYTE Data)
 {
     DEV_Digital_Write(EPD_DC_PIN, 1);
     DEV_Digital_Write(EPD_CS_PIN, 0);
@@ -62,7 +62,7 @@ void MonochromeDisplay::sendData(UBYTE Data)
     DEV_Digital_Write(EPD_CS_PIN, 1);
 }
 
-void MonochromeDisplay::sendData(UBYTE* pData, uint32_t Len)
+void MonochromeDisplay::sendData(BYTE* pData, DWORD Len)
 {
     DEV_Digital_Write(EPD_DC_PIN, 1);
     DEV_Digital_Write(EPD_CS_PIN, 0);
@@ -75,7 +75,7 @@ void MonochromeDisplay::sendData(UBYTE* pData, uint32_t Len)
 function :	Wait until the busy_pin goes LOW
 parameter:
 ******************************************************************************/
-void MonochromeDisplay::readBusy(void)
+void MonochromeDisplay::readBusy()
 {
     cout << "e-Paper busy" << endl;
     while(DEV_Digital_Read(EPD_BUSY_PIN) == 0) {      //LOW: idle, HIGH: busy
@@ -88,7 +88,7 @@ void MonochromeDisplay::readBusy(void)
 function :	Turn On Display
 parameter:
 ******************************************************************************/
-void MonochromeDisplay::turnOnDisplay(void)
+void MonochromeDisplay::turnOnDisplay()
 {
     sendCommand(DisplayCommand::DisplayRefresh); // DISPLAY_REFRESH
     DEV_Delay_ms(100);
@@ -99,7 +99,7 @@ void MonochromeDisplay::turnOnDisplay(void)
 function :	Initialize the e-Paper register
 parameter:
 ******************************************************************************/
-void MonochromeDisplay::init(void)
+void MonochromeDisplay::init()
 {
     reset();
 
@@ -122,16 +122,16 @@ void MonochromeDisplay::init(void)
     sendCommand(DisplayCommand::PllControl);                // PLL_CONTROL
     sendData(0x3c);
 
-    sendCommand(DisplayCommand::TemperatureCalibration);    // TEMPERATURE_CALIBRATION
+    sendCommand(DisplayCommand::TemperatureSensorSelection); // TEMPERATURE_SENSOR_SELECTION
     sendData(0x00);
 
-    sendCommand(DisplayCommand::VomAndDataIntervalSetting); // VCOM_AND_DATA_INTERVAL_SETTING
+    sendCommand(DisplayCommand::VcomAndDataIntervalSetting); // VCOM_AND_DATA_INTERVAL_SETTING
     sendData(0x77);
 
     sendCommand(DisplayCommand::TconSetting);               // TCON_SETTING
     sendData(0x22);
 
-    sendCommand(DisplayCommand::TconResolution);            // TCON_RESOLUTION
+    sendCommand(DisplayCommand::ResolutionSetting);            // TCON_RESOLUTION
     sendData(Width >> 8); // source 600
     sendData(Width & 0xff);
     sendData(Height >> 8); // gate 448
@@ -148,7 +148,7 @@ void MonochromeDisplay::init(void)
 function :	Clear screen
 parameter:
 ******************************************************************************/
-void MonochromeDisplay::clear(void)
+void MonochromeDisplay::clear()
 {
 	DWORD width = (Width % 8 == 0)? (Width / 8 ): (Width / 8 + 1);
 
@@ -156,7 +156,7 @@ void MonochromeDisplay::clear(void)
 	for (UWORD j = 0; j < Height; j++) {
 		for (UWORD i = 0; i < width; i++) {
 			for(UBYTE k = 0; k < 4; k++) {
-				//! \todo send more thant one byte at a time.
+				//! \todo send more than one byte at a time.
 				sendData(0x33);
 			}
 		}
@@ -169,7 +169,7 @@ void MonochromeDisplay::clear(void)
 function :	Sends the image buffer in RAM to e-Paper and displays
 parameter:
 ******************************************************************************/
-void MonochromeDisplay::display(UBYTE *Image)
+void MonochromeDisplay::display(BYTE *Image)
 {
 	BYTE data;
 	DWORD width = (Width % 8 == 0)? (Width / 8 ): (Width / 8 + 1);
@@ -188,7 +188,7 @@ void MonochromeDisplay::display(UBYTE *Image)
 function :	Enter sleep mode
 parameter:
 ******************************************************************************/
-void MonochromeDisplay::sleep(void)
+void MonochromeDisplay::sleep()
 {
 	sendCommand(DisplayCommand::PowerOff); // POWER_OFF
 	readBusy();

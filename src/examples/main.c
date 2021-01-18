@@ -5,6 +5,7 @@
 #include "EPD_5in83.h"
 #include "MonochromeBitmap.h"
 #include "MonochromeScreen.h"
+#include "MonochromeDisplay.h"
 
 using std::cout;
 using std::endl;
@@ -29,16 +30,20 @@ int main(void)
     }
 
 	cout << "Reading MonochromBitmap" << endl;
-	MonochromeBitmap bmp("./pic/5in83.bmp");
+	MonochromeBitmap bmp("./pic/out.bmp");
 	cout << "Creating MonochromeScreen" << endl;
 	MonochromeScreen screen(600, 448);
 	cout << "Draw Bitmap to Screen" << endl;
 	screen.draw(bmp);
 	cout << "Get the ScreenBuffer" << endl;
 	const BYTE* image = screen.getScreenBuffer();
-    EPD_5IN83_Init();
-    EPD_5IN83_Clear();
-	EPD_5IN83_Display(image);
+    //EPD_5IN83_Init();
+    //EPD_5IN83_Clear();
+	//EPD_5IN83_Display(image);
+	MonochromeDisplay display(600, 448);
+	display.init();
+	display.clear();
+	display.display(image);
 	DEV_Delay_ms(2000);
 	
 	

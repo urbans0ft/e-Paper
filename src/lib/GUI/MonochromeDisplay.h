@@ -16,15 +16,15 @@ class MonochromeDisplay
 		~MonochromeDisplay();
 		void display(const MonochromeScreen& screen);
 		void clear();
-		void display(BYTE *Image);
-		void init();
 		void readBusy();
-		void reset();
 		void sendCommand(DisplayCommand Reg);
 		void sendData(BYTE Data);
 		void sendData(BYTE* pData, DWORD Len);
 		void sleep();
 		void turnOnDisplay();
+	private:
+		void init();
+		void reset();
 
 	public:
 		static constexpr const uint8_t BYTE_SEND_TABLE[256][4]{

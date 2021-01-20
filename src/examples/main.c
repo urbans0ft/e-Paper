@@ -35,15 +35,14 @@ int main(void)
 	MonochromeScreen screen(600, 448);
 	cout << "Draw Bitmap to Screen" << endl;
 	screen.draw(bmp);
-	cout << "Get the ScreenBuffer" << endl;
-	const BYTE* image = screen.getScreenBuffer();
     //EPD_5IN83_Init();
     //EPD_5IN83_Clear();
 	//EPD_5IN83_Display(image);
+	cout << "Create Display" << endl;
 	MonochromeDisplay display(600, 448);
-	display.init();
 	display.clear();
-	display.display(image);
+	cout << "Display screen" << endl;
+	display.display(screen);
 	DEV_Delay_ms(2000);
 	
 	

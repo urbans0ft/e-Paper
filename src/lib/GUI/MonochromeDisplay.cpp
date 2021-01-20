@@ -14,6 +14,7 @@ constexpr BYTE MonochromeDisplay::BYTE_SEND_TABLE[256][4];
 MonochromeDisplay::MonochromeDisplay(DWORD width, DWORD height)
 	: Width(width), Height(height)
 {
+	this->init();
 }
 // ----------------------------------------------
 MonochromeDisplay::~MonochromeDisplay()
@@ -150,15 +151,17 @@ parameter:
 ******************************************************************************/
 void MonochromeDisplay::clear()
 {
+	const BYTE white[4]{0x33, 0x33, 0x33, 0x33};
 	DWORD width = (Width % 8 == 0)? (Width / 8 ): (Width / 8 + 1);
 
 	sendCommand(DisplayCommand::DataStartTransmission1);
-	for (UWORD j = 0; j < Height; j++) {
-		for (UWORD i = 0; i < width; i++) {
-			for(UBYTE k = 0; k < 4; k++) {
-				//! \todo send more than one byte at a time.
-				sendData(0x33);
-			}
+	for (DWORD j = 0; j < Height; j++) {
+		for (DWORD i = 0; i < width; i++) {
+			//for(BYTE k = 0; k < 4; k++) {
+			//	//! \todo send more than one byte at a time.
+			//	sendData(0x33);
+			//}
+			sendData(white, 4);
 		}
 	}
 	turnOnDisplay();
@@ -169,15 +172,16 @@ void MonochromeDisplay::clear()
 function :	Sends the image buffer in RAM to e-Paper and displays
 parameter:
 ******************************************************************************/
-void MonochromeDisplay::display(BYTE *Image)
+void MonochromeDisplay::display(const MonochromeScreen& screen)
 {
 	BYTE data;
 	DWORD width = (Width % 8 == 0)? (Width / 8 ): (Width / 8 + 1);
+	const BYTE* buffer = screen.getScreenBuffer();
 
 	sendCommand(DisplayCommand::DataStartTransmission1);
-	for (UWORD j = 0; j < Height; j++) {
-		for (int i = 0; i < width; i++) {
-			data = Image[i + j * width];
+	for (DWORD j = 0; j < Height; j++) {
+		for (DWORD i = 0; i < width; i++) {
+			data = buffer[i + j * width];
 			sendData(BYTE_SEND_TABLE[data], 4);
 		}
 	}

@@ -2,7 +2,6 @@
 #include <stdlib.h>     //exit()
 #include <signal.h>     //signal()
 #include "EPD_Test.h"   //Examples
-#include "EPD_5in83.h"
 #include "MonochromeBitmap.h"
 #include "MonochromeScreen.h"
 #include "MonochromeDisplay.h"

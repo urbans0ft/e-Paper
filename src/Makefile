@@ -1,4 +1,4 @@
-SRC_DIRS = lib/Config lib/e-Paper lib/Fonts lib/GUI \
+SRC_DIRS = lib/Config lib/Fonts lib/GUI \
 		   examples
 TARGET   = epd
 

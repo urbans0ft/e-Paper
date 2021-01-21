@@ -1,3 +1,11 @@
+#include "Spi.h"
+#include <iostream>
+#include <bcm2835.h>
+#include <unistd.h> // open / read
+
+using std::cout;
+using std::endl;
+
 /*****************************************************************************
 * | File      	:   DEV_Config.c
 * | Author      :   Waveshare team
@@ -27,70 +35,73 @@
 # THE SOFTWARE.
 #
 ******************************************************************************/
-#include "DEV_Config.h"
 #include <fcntl.h>
 
-/**
- * GPIO
-**/
-int EPD_RST_PIN;
-int EPD_DC_PIN;
-int EPD_CS_PIN;
-int EPD_BUSY_PIN;
+Spi::Spi() : RstPin{17}, DcPin{25}, CsPin{8}, BusyPin{24}
+{
+	//! \todo throw exception if return != 0
+	cout << "Spi C'tor" << endl;
+	cout << "Rst: " << RstPin << "; DC: " << DcPin << "; CS: " << CsPin << "; Busy: " << BusyPin << endl;
+	initModule();
+}
+Spi::~Spi()
+{
+	cout << "Destructor" << endl;
+	exitModule();
+}
 
 /**
  * GPIO read and write
 **/
-void DEV_Digital_Write(UWORD Pin, UBYTE Value)
+void Spi::write(WORD pin, BYTE value)
 {
-	printf("DEV_Digital_Write(Pin=%d, Value=%d)\n", Pin, Value);
-	bcm2835_gpio_write(Pin, Value);
+	bcm2835_gpio_write(pin, value);
 }
 
-UBYTE DEV_Digital_Read(UWORD Pin)
+BYTE Spi::read(WORD pin)
 {
-	UBYTE Read_value = 0;
-	Read_value = bcm2835_gpio_lev(Pin);
+	BYTE Read_value = 0;
+	Read_value = bcm2835_gpio_lev(pin);
 	return Read_value;
 }
 
 /**
  * SPI
 **/
-void DEV_SPI_WriteByte(uint8_t Value)
+void Spi::transfer(BYTE value)
 {
-	bcm2835_spi_transfer(Value);
+	bcm2835_spi_transfer(value);
 }
 
-void DEV_SPI_Write_nByte(uint8_t *pData, uint32_t Len)
+void Spi::transfer(BYTE* data, WORD len)
 {
-	char rData[Len];
+	char rData[len];
 	//! \todo make cast unnecessary
-	bcm2835_spi_transfernb((char*)pData,rData,Len);
+	bcm2835_spi_transfernb((char*)data,rData,len);
 }
 
 /**
  * GPIO Mode
 **/
-void DEV_GPIO_Mode(UWORD Pin, UWORD Mode)
+void Spi::setGpioMode(WORD pin, WORD mode)
 {
-	printf("DEV_GPIO_Mode(Pin=%d, Mode=%d)\n", Pin, Mode);
-	if(Mode == 0 || Mode == BCM2835_GPIO_FSEL_INPT) {
-		bcm2835_gpio_fsel(Pin, BCM2835_GPIO_FSEL_INPT);
+	cout << "setGpioMode(pin=" << pin << ", mode=" << mode << ")" << endl;
+	if(mode == 0 || mode == BCM2835_GPIO_FSEL_INPT) {
+		bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_INPT);
 	} else {
-		bcm2835_gpio_fsel(Pin, BCM2835_GPIO_FSEL_OUTP);
+		bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_OUTP);
 	}
 }
 
 /**
  * delay x ms
 **/
-void DEV_Delay_ms(UDOUBLE xms)
+void Spi::delayMs(unsigned int ms)
 {
-	bcm2835_delay(xms);
+	bcm2835_delay(ms);
 }
 
-static int DEV_Equipment_Testing(void)
+int Spi::testing(void)
 {
 	int i;
 	int fd;
@@ -99,12 +110,12 @@ static int DEV_Equipment_Testing(void)
     printf("Current environment: ");
 	while(1) {
 		if (fd < 0) {
-			Debug( "Read failed Pin\n");
+			cout << "Read failed Pin" << endl;;
 			return -1;
 		}
 		for(i=0;; i++) {
-			if (read(fd, &value_str[i], 1) < 0) {
-				Debug( "failed to read value!\n");
+			if (::read(fd, &value_str[i], 1) < 0) {
+				cout << "failed to read value!" << endl;
 				return -1;
 			}
 			if(value_str[i] ==32) {
@@ -133,29 +144,24 @@ static int DEV_Equipment_Testing(void)
 
 
 
-void DEV_GPIO_Init(void)
+void Spi::initGpio(void)
 {
-	EPD_RST_PIN     = 17;
-	EPD_DC_PIN      = 25;
-	EPD_CS_PIN      = 8;
-	EPD_BUSY_PIN    = 24;
+	setGpioMode(RstPin,  1);
+	setGpioMode(DcPin,   1);
+	setGpioMode(CsPin,   1);
+	setGpioMode(BusyPin, 0);
 
-	DEV_GPIO_Mode(EPD_RST_PIN, 1);
-	DEV_GPIO_Mode(EPD_DC_PIN, 1);
-	DEV_GPIO_Mode(EPD_CS_PIN, 1);
-	DEV_GPIO_Mode(EPD_BUSY_PIN, 0);
-
-	DEV_Digital_Write(EPD_CS_PIN, 1);
+	write(CsPin, 1);
 }
 /******************************************************************************
 function:	Module Initialize, the library and initialize the pins, SPI protocol
 parameter:
 Info:
 ******************************************************************************/
-UBYTE DEV_Module_Init(void)
+BYTE Spi::initModule(void)
 {
     printf("/***********************************/ \r\n");
-	if(DEV_Equipment_Testing() < 0) {
+	if(testing() < 0) {
 		return 1;
 	}
 	if(!bcm2835_init()) {
@@ -166,7 +172,7 @@ UBYTE DEV_Module_Init(void)
 	}
 
 	// GPIO Config
-	DEV_GPIO_Init();
+	initGpio();
 
 	bcm2835_spi_begin();                                         //Start spi interface, set spi pin for the reuse function
 	bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);     //High first transmission
@@ -184,12 +190,13 @@ function:	Module exits, closes SPI and BCM2835 library
 parameter:
 Info:
 ******************************************************************************/
-void DEV_Module_Exit(void)
+void Spi::exitModule(void)
 {
-	DEV_Digital_Write(EPD_CS_PIN, LOW);
-	DEV_Digital_Write(EPD_DC_PIN, LOW);
-	DEV_Digital_Write(EPD_RST_PIN, LOW);
+	write(CsPin,  LOW);
+	write(DcPin,  LOW);
+	write(RstPin, LOW);
 
 	bcm2835_spi_end();
 	bcm2835_close();
 }
+

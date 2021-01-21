@@ -28,8 +28,7 @@
 #
 ******************************************************************************/
 #include "EPD_Test.h"
-#include "EPD_5in83.h"
-
+#if 0
 int EPD_5in83_test(void)
 {
     printf("EPD_5IN83_test Demo\r\n");
@@ -122,4 +121,4 @@ int EPD_5in83_test(void)
     
     return 0;
 }
-
+#endif

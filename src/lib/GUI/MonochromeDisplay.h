@@ -4,16 +4,30 @@
 // =============================================================================
 #include "global.h"
 #include "MonochromeScreen.h"
+#include "DisplayCommand.h"
+#include "Spi.h"
 // =============================================================================
 class MonochromeDisplay
 {
 	private:
 		const DWORD Width;
 		const DWORD Height;
+		Spi         _spi;
 	public:
 		MonochromeDisplay(DWORD width, DWORD height);
 		~MonochromeDisplay();
 		void display(const MonochromeScreen& screen);
+		void clear();
+		void readBusy();
+		void sendCommand(DisplayCommand Reg);
+		void sendData(BYTE Data);
+		void sendData(BYTE* pData, DWORD Len);
+		void sleep();
+		void turnOnDisplay();
+	private:
+		void init();
+		void reset();
+
 	public:
 		static constexpr const uint8_t BYTE_SEND_TABLE[256][4]{
 			{ 0x00, 0x00, 0x00, 0x00, }, // 00000000: 00000000 00000000 00000000 00000000

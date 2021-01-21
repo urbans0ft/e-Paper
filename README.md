@@ -1,7 +1,7 @@
 ﻿e-Paper
 =======
 
-__Currently under development!__
+__Currently in beta statium!__
 
 Preamble
 --------
@@ -13,8 +13,8 @@ This repository has been reduced to work with the [Waveshare](https://www.wavesh
 Prerequisites
 -------------
 
-- git: sudo apt install git
-- [ImageMagick](https://imagemagick.org/) (_recommended_): sudo apt install imagemagick
+- git: `sudo apt install git`
+- [ImageMagick](https://imagemagick.org/) (_recommended_): `sudo apt install imagemagick`
 
 Compile
 -------
@@ -28,8 +28,10 @@ Use the (master) _Makefile_ provided in the _src/_ directory. There are other _M
 To-Dos
 ------
 
-- [ ] Move `EPD_5IN83_*` functions to the `MonochromeDisplay` class.
-- [ ] Create a driver class to handle SPI communication.
+- [x] Move `EPD_5IN83_*` functions to the `MonochromeDisplay` class.
+- [x] Create a driver class to handle SPI communication.
+	- [ ] Make the class a singleton
+	- [ ] Make the SPI pins configurable
 - [ ] Create conditional _DEBUG_ output information.
 - [ ] Extend documentation.
 

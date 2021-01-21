@@ -37,13 +37,18 @@ using std::endl;
 ******************************************************************************/
 #include <fcntl.h>
 
-/**
- * GPIO
-**/
-int EPD_RST_PIN;
-int EPD_DC_PIN;
-int EPD_CS_PIN;
-int EPD_BUSY_PIN;
+Spi::Spi() : RstPin{17}, DcPin{25}, CsPin{8}, BusyPin{24}
+{
+	//! \todo throw exception if return != 0
+	cout << "Spi C'tor" << endl;
+	cout << "Rst: " << RstPin << "; DC: " << DcPin << "; CS: " << CsPin << "; Busy: " << BusyPin << endl;
+	initModule();
+}
+Spi::~Spi()
+{
+	cout << "Destructor" << endl;
+	exitModule();
+}
 
 /**
  * GPIO read and write
@@ -78,12 +83,13 @@ void Spi::transfer(BYTE* data, WORD len)
 /**
  * GPIO Mode
 **/
-void Spi::setGpioMode(WORD Pin, WORD Mode)
+void Spi::setGpioMode(WORD pin, WORD mode)
 {
-	if(Mode == 0 || Mode == BCM2835_GPIO_FSEL_INPT) {
-		bcm2835_gpio_fsel(Pin, BCM2835_GPIO_FSEL_INPT);
+	cout << "setGpioMode(pin=" << pin << ", mode=" << mode << ")" << endl;
+	if(mode == 0 || mode == BCM2835_GPIO_FSEL_INPT) {
+		bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_INPT);
 	} else {
-		bcm2835_gpio_fsel(Pin, BCM2835_GPIO_FSEL_OUTP);
+		bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_OUTP);
 	}
 }
 
@@ -140,17 +146,12 @@ int Spi::testing(void)
 
 void Spi::initGpio(void)
 {
-	EPD_RST_PIN     = 17;
-	EPD_DC_PIN      = 25;
-	EPD_CS_PIN      = 8;
-	EPD_BUSY_PIN    = 24;
+	setGpioMode(RstPin,  1);
+	setGpioMode(DcPin,   1);
+	setGpioMode(CsPin,   1);
+	setGpioMode(BusyPin, 0);
 
-	setGpioMode(EPD_RST_PIN, 1);
-	setGpioMode(EPD_DC_PIN, 1);
-	setGpioMode(EPD_CS_PIN, 1);
-	setGpioMode(EPD_BUSY_PIN, 0);
-
-	write(EPD_CS_PIN, 1);
+	write(CsPin, 1);
 }
 /******************************************************************************
 function:	Module Initialize, the library and initialize the pins, SPI protocol
@@ -191,9 +192,9 @@ Info:
 ******************************************************************************/
 void Spi::exitModule(void)
 {
-	write(EPD_CS_PIN, LOW);
-	write(EPD_DC_PIN, LOW);
-	write(EPD_RST_PIN, LOW);
+	write(CsPin,  LOW);
+	write(DcPin,  LOW);
+	write(RstPin, LOW);
 
 	bcm2835_spi_end();
 	bcm2835_close();

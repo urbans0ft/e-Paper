@@ -6,6 +6,7 @@
 #include "MonochromeBitmap.h"
 #include "MonochromeScreen.h"
 #include "MonochromeDisplay.h"
+#include "Spi.h"
 
 using std::cout;
 using std::endl;
@@ -25,9 +26,13 @@ int main(void)
     // Exception handling:ctrl + c
     signal(SIGINT, Handler);
 
-    if(DEV_Module_Init()!=0){
+    /*
+	if(DEV_Module_Init()!=0){
         return -1;
     }
+	//*/
+	cout << "Creating Spi driver object" << endl;
+	//Spi spi;
 
 	cout << "Reading MonochromBitmap" << endl;
 	MonochromeBitmap bmp("./pic/out.bmp");
@@ -43,11 +48,13 @@ int main(void)
 	display.clear();
 	cout << "Display screen" << endl;
 	display.display(screen);
+
 	DEV_Delay_ms(2000);
+	//spi.delayMs(2000);
 	
 	
     
-    DEV_Module_Exit();
+    //DEV_Module_Exit(); // implicit bis ~Spi
 
     return 0;
 }

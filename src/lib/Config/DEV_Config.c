@@ -43,6 +43,7 @@ int EPD_BUSY_PIN;
 **/
 void DEV_Digital_Write(UWORD Pin, UBYTE Value)
 {
+	printf("DEV_Digital_Write(Pin=%d, Value=%d)\n", Pin, Value);
 	bcm2835_gpio_write(Pin, Value);
 }
 
@@ -73,6 +74,7 @@ void DEV_SPI_Write_nByte(uint8_t *pData, uint32_t Len)
 **/
 void DEV_GPIO_Mode(UWORD Pin, UWORD Mode)
 {
+	printf("DEV_GPIO_Mode(Pin=%d, Mode=%d)\n", Pin, Mode);
 	if(Mode == 0 || Mode == BCM2835_GPIO_FSEL_INPT) {
 		bcm2835_gpio_fsel(Pin, BCM2835_GPIO_FSEL_INPT);
 	} else {

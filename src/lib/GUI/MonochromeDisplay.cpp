@@ -14,11 +14,13 @@ constexpr BYTE MonochromeDisplay::BYTE_SEND_TABLE[256][4];
 MonochromeDisplay::MonochromeDisplay(DWORD width, DWORD height)
 	: Width(width), Height(height)
 {
+	//_spi = new Spi();
 	this->init();
 }
 // ----------------------------------------------
 MonochromeDisplay::~MonochromeDisplay()
 {
+	//delete _spi;
 }
 // ----------------------------------------------
 
@@ -29,12 +31,12 @@ parameter:
 ******************************************************************************/
 void MonochromeDisplay::reset()
 {
-    DEV_Digital_Write(EPD_RST_PIN, 1);
-    DEV_Delay_ms(200);
-    DEV_Digital_Write(EPD_RST_PIN, 0);
-    DEV_Delay_ms(2);
-    DEV_Digital_Write(EPD_RST_PIN, 1);
-    DEV_Delay_ms(200);
+    _spi.write(_spi.RstPin, 1);
+    _spi.delayMs(200);
+    _spi.write(_spi.RstPin, 0);
+    _spi.delayMs(2);
+    _spi.write(_spi.RstPin, 1);
+    _spi.delayMs(200);
 }
 
 /******************************************************************************
@@ -44,10 +46,10 @@ parameter:
 ******************************************************************************/
 void MonochromeDisplay::sendCommand(DisplayCommand Reg)
 {
-    DEV_Digital_Write(EPD_DC_PIN, 0);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
-    DEV_SPI_WriteByte(static_cast<BYTE>(Reg));
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+    _spi.write(_spi.DcPin, 0);
+    _spi.write(_spi.CsPin, 0);
+    _spi.transfer(static_cast<BYTE>(Reg));
+    _spi.write(_spi.CsPin, 1);
 }
 
 /******************************************************************************
@@ -57,18 +59,18 @@ parameter:
 ******************************************************************************/
 void MonochromeDisplay::sendData(BYTE Data)
 {
-    DEV_Digital_Write(EPD_DC_PIN, 1);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
-    DEV_SPI_WriteByte(Data);
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+    _spi.write(_spi.DcPin, 1);
+    _spi.write(_spi.CsPin, 0);
+    _spi.transfer(Data);
+    _spi.write(_spi.CsPin, 1);
 }
 
 void MonochromeDisplay::sendData(BYTE* pData, DWORD Len)
 {
-    DEV_Digital_Write(EPD_DC_PIN, 1);
-    DEV_Digital_Write(EPD_CS_PIN, 0);
-    DEV_SPI_Write_nByte(pData, Len);
-    DEV_Digital_Write(EPD_CS_PIN, 1);
+    _spi.write(_spi.DcPin, 1);
+    _spi.write(_spi.CsPin, 0);
+    _spi.transfer(pData, Len);
+    _spi.write(_spi.CsPin, 1);
 }
 
 
@@ -79,8 +81,8 @@ parameter:
 void MonochromeDisplay::readBusy()
 {
     cout << "e-Paper busy" << endl;
-    while(DEV_Digital_Read(EPD_BUSY_PIN) == 0) {      //LOW: idle, HIGH: busy
-        DEV_Delay_ms(100);
+    while(_spi.read(_spi.BusyPin) == 0) {      //LOW: idle, HIGH: busy
+        _spi.delayMs(100);
     }
     cout << "e-Paper busy release" << endl;
 }
@@ -92,7 +94,7 @@ parameter:
 void MonochromeDisplay::turnOnDisplay()
 {
     sendCommand(DisplayCommand::DisplayRefresh); // DISPLAY_REFRESH
-    DEV_Delay_ms(100);
+    _spi.delayMs(100);
     readBusy();
 }
 

@@ -5,11 +5,11 @@
 // =============================================================================
 class Spi
 {
-	private:
-		int EPD_RST_PIN;
-		int EPD_DC_PIN;
-		int EPD_CS_PIN;
-		int EPD_BUSY_PIN;
+	public:
+		const int RstPin;
+		const int DcPin;
+		const int CsPin;
+		const int BusyPin;
 	public:
 		Spi();
 		~Spi();

@@ -5,12 +5,14 @@
 #include "global.h"
 #include "MonochromeScreen.h"
 #include "DisplayCommand.h"
+#include "Spi.h"
 // =============================================================================
 class MonochromeDisplay
 {
 	private:
 		const DWORD Width;
 		const DWORD Height;
+		Spi         _spi;
 	public:
 		MonochromeDisplay(DWORD width, DWORD height);
 		~MonochromeDisplay();

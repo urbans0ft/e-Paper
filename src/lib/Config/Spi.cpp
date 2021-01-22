@@ -73,10 +73,9 @@ void Spi::transfer(BYTE value)
 	bcm2835_spi_transfer(value);
 }
 
-void Spi::transfer(BYTE* data, WORD len)
+void Spi::transfer(const BYTE* data, WORD len)
 {
 	char rData[len];
-	//! \todo make cast unnecessary
 	bcm2835_spi_transfernb((char*)data,rData,len);
 }
 

@@ -30,7 +30,7 @@ class Spi
 		void setGpioMode(WORD pin, WORD mode);
 		void exitModule();
 		void transfer(BYTE value);
-		void transfer(BYTE* data, WORD len);
+		void transfer(const BYTE* data, WORD len);
 };
 // #############################################################################
 #endif // _SPI_H_

@@ -21,7 +21,7 @@ class MonochromeDisplay
 		void readBusy();
 		void sendCommand(DisplayCommand Reg);
 		void sendData(BYTE Data);
-		void sendData(BYTE* pData, DWORD Len);
+		void sendData(const BYTE* pData, DWORD Len);
 		void sleep();
 		void turnOnDisplay();
 	private:

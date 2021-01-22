@@ -6,13 +6,21 @@
 class Spi
 {
 	public:
+		static Spi& Instance()
+		{
+			static Spi _instance;
+			return _instance;
+		}
 		const int RstPin;
 		const int DcPin;
 		const int CsPin;
 		const int BusyPin;
-	public:
+	private:
 		Spi();
+	public:
 		~Spi();
+		Spi(const Spi&) = delete;
+		Spi& operator=(const Spi&)  = delete;
 		BYTE read(WORD pin);
 		BYTE initModule();
 		int testing();

@@ -12,7 +12,7 @@ class MonochromeDisplay
 	private:
 		const DWORD Width;
 		const DWORD Height;
-		Spi         _spi;
+		Spi&        _spi = Spi::Instance();
 	public:
 		MonochromeDisplay(DWORD width, DWORD height);
 		~MonochromeDisplay();

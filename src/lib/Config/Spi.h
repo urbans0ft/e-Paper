@@ -11,10 +11,11 @@ class Spi
 			static Spi _instance;
 			return _instance;
 		}
-		const int RstPin;
-		const int DcPin;
-		const int CsPin;
-		const int BusyPin;
+		//! \todo replace by getter and search an replace everywhere.
+		/*const*/ int RstPin;
+		/*const*/ int DcPin;
+		/*const*/ int CsPin;
+		/*const*/ int BusyPin;
 	private:
 		Spi();
 	public:

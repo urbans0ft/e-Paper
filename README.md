@@ -14,6 +14,7 @@ Prerequisites
 -------------
 
 - git: `sudo apt install git`
+- libconfig: ` sudo apt install libconfig++-dev`
 - [ImageMagick](https://imagemagick.org/) (_recommended_): `sudo apt install imagemagick`
 
 Compile

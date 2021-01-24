@@ -14,6 +14,18 @@ Prerequisites
 -------------
 
 - git: `sudo apt install git`
+- bcm2835 lib
+	- Download latest (bcm2835-1.XX.tar.gz)[http://www.airspayce.com/mikem/bcm2835/].
+		
+		```
+		tar zxvf bcm2835-1.XX.tar.gz
+		cd bcm2835-1.XX
+		./configure
+		make
+		sudo make check
+		sudo make install
+		```
+
 - libconfig: ` sudo apt install libconfig++-dev`
 - [ImageMagick](https://imagemagick.org/) (_recommended_): `sudo apt install imagemagick`
 

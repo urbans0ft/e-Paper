@@ -9,3 +9,5 @@ Converting an existing image to a monochrome one.
     $ convert in.jpg -monochrome -resize 600x448 -type bilevel BMP3:out.bmp
     or
     $ convert in.jpg -threshld 50% -resize 600x448 -depth 1 -type bilevel BMP3:out.bmp
+	to center the result
+	$ convert in.jpg -monochrome -resize 600x448 -gravity center -background white -extent 600x448 -type bilevel BMP3:out.bmp

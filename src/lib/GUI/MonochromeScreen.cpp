@@ -23,7 +23,6 @@ void MonochromeScreen::draw(const MonochromeBitmap& bmp)
 	const DWORD& bmpHeight = bmp.getHeight();
 	const DWORD& bmpWidth  = bmp.getWidth();
 	const DWORD& bmpStride = bmp.getStride();
-	const BYTE*  bmpPxData = bmp.getPxData();
 
 	// calculate endianness
 	const WORD endianTest = 0x0100; // LE => 00 10 / BE => 01 00

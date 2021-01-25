@@ -36,12 +36,38 @@ using std::endl;
 #
 ******************************************************************************/
 #include <fcntl.h>
+#include <libconfig.h++>
 
-Spi::Spi() : RstPin{17}, DcPin{25}, CsPin{8}, BusyPin{24}
+//! \todo make default values const
+Spi::Spi() : RstPin{17}, DcPin{25}, CsPin{7}, BusyPin{24}
 {
-	//! \todo throw exception if return != 0
+	libconfig::Config cfg;
+	cfg.readFile("epd.conf"); //! \todo replace strings with const variable.
+
+
+	if (cfg.exists("epd.gpio.rst"))
+	{
+		RstPin = cfg.lookup("epd.gpio.rst");
+	}
+	if (cfg.exists("epd.gpio.dc"))
+	{
+		DcPin = cfg.lookup("epd.gpio.dc");
+	}
+	if (cfg.exists("epd.gpio.cs"))
+	{
+		CsPin = cfg.lookup("epd.gpio.cs");
+	}
+	if (cfg.exists("epd.gpio.busy"))
+	{
+		BusyPin = cfg.lookup("epd.gpio.busy");
+	}
+
+	//! \todo throw exception if CsPin is unequal to 7 or 8
+
 	cout << "Spi C'tor" << endl;
 	cout << "Rst: " << RstPin << "; DC: " << DcPin << "; CS: " << CsPin << "; Busy: " << BusyPin << endl;
+
+	//! \todo throw exception on != 0 return
 	initModule();
 }
 Spi::~Spi()
@@ -73,10 +99,9 @@ void Spi::transfer(BYTE value)
 	bcm2835_spi_transfer(value);
 }
 
-void Spi::transfer(BYTE* data, WORD len)
+void Spi::transfer(const BYTE* data, WORD len)
 {
 	char rData[len];
-	//! \todo make cast unnecessary
 	bcm2835_spi_transfernb((char*)data,rData,len);
 }
 
@@ -178,8 +203,17 @@ BYTE Spi::initModule(void)
 	bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);     //High first transmission
 	bcm2835_spi_setDataMode(BCM2835_SPI_MODE0);                  //spi mode 0
 	bcm2835_spi_setClockDivider(BCM2835_SPI_CLOCK_DIVIDER_128);  //Frequency
-	bcm2835_spi_chipSelect(BCM2835_SPI_CS0);                     //set CE0
-	bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS0, LOW);     //enable cs0
+	if (CsPin == 8) // Chip Select 0
+	{
+		cout << "Using CS0" << endl;
+		bcm2835_spi_chipSelect(BCM2835_SPI_CS0);
+	}
+	else // CsPin == 7 Chip Select 1
+	{
+		cout << "Using CS1" << endl;
+		bcm2835_spi_chipSelect(BCM2835_SPI_CS1);
+	}
+	bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS1, LOW);     //enable cs0
 
     printf("/***********************************/ \r\n");
 	return 0;

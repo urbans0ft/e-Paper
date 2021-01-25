@@ -8,8 +8,7 @@ export BIN_DIR = $(CURDIR)/bin
 export CC      = g++
 INCLUDES       = $(addprefix -I $(CURDIR)/, $(SRC_DIRS))
 export CFLAGS  = -c -g -Wall $(INCLUDES) -DDEBUG
-export CFLAGS += -fpermissive
-LFLAGS         = -lbcm2835 -lm
+LFLAGS         = -lbcm2835 -lm -lconfig++
 
 # create bin dir
 $(shell mkdir -p ${BIN_DIR})

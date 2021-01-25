@@ -65,7 +65,7 @@ void MonochromeDisplay::sendData(BYTE Data)
     _spi.write(_spi.CsPin, 1);
 }
 
-void MonochromeDisplay::sendData(BYTE* pData, DWORD Len)
+void MonochromeDisplay::sendData(const BYTE* pData, DWORD Len)
 {
     _spi.write(_spi.DcPin, 1);
     _spi.write(_spi.CsPin, 0);

@@ -43,8 +43,9 @@ To-Dos
 
 - [x] Move `EPD_5IN83_*` functions to the `MonochromeDisplay` class.
 - [x] Create a driver class to handle SPI communication.
-	- [ ] Make the class a singleton
-	- [ ] Make the SPI pins configurable
+	- [x] Make the class a singleton
+	- [x] Make the SPI pins configurable
+	- [ ] Remove the TODOS
 - [ ] Create conditional _DEBUG_ output information.
 - [ ] Extend documentation.
 

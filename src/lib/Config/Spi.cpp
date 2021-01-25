@@ -38,7 +38,7 @@ using std::endl;
 #include <fcntl.h>
 #include <libconfig.h++>
 
-
+//! \todo make default values const
 Spi::Spi() : RstPin{17}, DcPin{25}, CsPin{7}, BusyPin{24}
 {
 	libconfig::Config cfg;
@@ -62,10 +62,10 @@ Spi::Spi() : RstPin{17}, DcPin{25}, CsPin{7}, BusyPin{24}
 		BusyPin = cfg.lookup("epd.gpio.busy");
 	}
 
-	//! \todo throw exception if return != 0
+	//! \todo throw exception if CsPin is unequal to 7 or 8
+
 	cout << "Spi C'tor" << endl;
 	cout << "Rst: " << RstPin << "; DC: " << DcPin << "; CS: " << CsPin << "; Busy: " << BusyPin << endl;
-	
 
 	//! \todo throw exception on != 0 return
 	initModule();
@@ -203,7 +203,16 @@ BYTE Spi::initModule(void)
 	bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);     //High first transmission
 	bcm2835_spi_setDataMode(BCM2835_SPI_MODE0);                  //spi mode 0
 	bcm2835_spi_setClockDivider(BCM2835_SPI_CLOCK_DIVIDER_128);  //Frequency
-	bcm2835_spi_chipSelect(BCM2835_SPI_CS1);                     //set CE0
+	if (CsPin == 8) // Chip Select 0
+	{
+		cout << "Using CS0" << endl;
+		bcm2835_spi_chipSelect(BCM2835_SPI_CS0);
+	}
+	else // CsPin == 7 Chip Select 1
+	{
+		cout << "Using CS1" << endl;
+		bcm2835_spi_chipSelect(BCM2835_SPI_CS1);
+	}
 	bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS1, LOW);     //enable cs0
 
     printf("/***********************************/ \r\n");

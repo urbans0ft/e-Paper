@@ -15,7 +15,7 @@ Prerequisites
 
 - git: `sudo apt install git`
 - bcm2835 lib
-	- Download latest (bcm2835-1.XX.tar.gz)[http://www.airspayce.com/mikem/bcm2835/].
+	- Download latest [bcm2835-1.XX.tar.gz](http://www.airspayce.com/mikem/bcm2835/).
 		
 		```
 		tar zxvf bcm2835-1.XX.tar.gz

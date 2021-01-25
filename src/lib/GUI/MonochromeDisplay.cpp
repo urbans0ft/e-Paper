@@ -14,13 +14,11 @@ constexpr BYTE MonochromeDisplay::BYTE_SEND_TABLE[256][4];
 MonochromeDisplay::MonochromeDisplay(DWORD width, DWORD height)
 	: Width(width), Height(height)
 {
-	//_spi = new Spi();
 	this->init();
 }
 // ----------------------------------------------
 MonochromeDisplay::~MonochromeDisplay()
 {
-	//delete _spi;
 }
 // ----------------------------------------------
 
@@ -47,9 +45,7 @@ parameter:
 void MonochromeDisplay::sendCommand(DisplayCommand Reg)
 {
     _spi.write(_spi.DcPin, 0);
-    _spi.write(_spi.CsPin, 0);
     _spi.transfer(static_cast<BYTE>(Reg));
-    _spi.write(_spi.CsPin, 1);
 }
 
 /******************************************************************************
@@ -60,17 +56,13 @@ parameter:
 void MonochromeDisplay::sendData(BYTE Data)
 {
     _spi.write(_spi.DcPin, 1);
-    _spi.write(_spi.CsPin, 0);
     _spi.transfer(Data);
-    _spi.write(_spi.CsPin, 1);
 }
 
 void MonochromeDisplay::sendData(const BYTE* pData, DWORD Len)
 {
     _spi.write(_spi.DcPin, 1);
-    _spi.write(_spi.CsPin, 0);
     _spi.transfer(pData, Len);
-    _spi.write(_spi.CsPin, 1);
 }
 
 
@@ -159,10 +151,6 @@ void MonochromeDisplay::clear()
 	sendCommand(DisplayCommand::DataStartTransmission1);
 	for (DWORD j = 0; j < Height; j++) {
 		for (DWORD i = 0; i < width; i++) {
-			//for(BYTE k = 0; k < 4; k++) {
-			//	//! \todo send more than one byte at a time.
-			//	sendData(0x33);
-			//}
 			sendData(white, 4);
 		}
 	}

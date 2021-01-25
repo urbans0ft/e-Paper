@@ -10,50 +10,42 @@
 using std::cout;
 using std::endl;
 
-void  Handler(int signo)
+// Let Destructors still do their job (Spi singleton)
+void Handler(int signo)
 {
-    //System Exit
-    printf("\r\nHandler:exit\r\n");
-    DEV_Module_Exit();
+    cout << "Ctrl + c received" << endl;
 
     exit(0);
 }
 
 
-int main(void)
+int main(int argc, char* argv[])
 {
     // Exception handling:ctrl + c
     signal(SIGINT, Handler);
 
-    /*
-	if(DEV_Module_Init()!=0){
-        return -1;
-    }
-	//*/
-	cout << "Creating Spi driver object" << endl;
-	//Spi spi;
+	if (argc != 2)
+	{
+		cout << "Usage: epd image.bmp" << endl;
+		cout << "       image.bmp must be a 600x448 V3 monochrome bitmap." << endl;
+		return 0;
+	}
 
 	cout << "Reading MonochromBitmap" << endl;
-	MonochromeBitmap bmp("./pic/out.bmp");
+	MonochromeBitmap bmp(argv[1]);
 	cout << "Creating MonochromeScreen" << endl;
 	MonochromeScreen screen(600, 448);
 	cout << "Draw Bitmap to Screen" << endl;
 	screen.draw(bmp);
-    //EPD_5IN83_Init();
-    //EPD_5IN83_Clear();
-	//EPD_5IN83_Display(image);
 	cout << "Create Display" << endl;
 	MonochromeDisplay display(600, 448);
+	cout << "Clear Display" << endl;
 	display.clear();
-	cout << "Display screen" << endl;
+	cout << "Display Screen" << endl;
 	display.display(screen);
 
-	DEV_Delay_ms(2000);
-	//spi.delayMs(2000);
-	
-	
-    
-    //DEV_Module_Exit(); // implicit bis ~Spi
+	cout << "Wait for 2 seconds" << endl;
+	Spi::Instance().delayMs(2000);    
 
     return 0;
 }

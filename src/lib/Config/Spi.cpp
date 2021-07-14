@@ -207,13 +207,14 @@ BYTE Spi::initModule(void)
 	{
 		cout << "Using CS0" << endl;
 		bcm2835_spi_chipSelect(BCM2835_SPI_CS0);
+		bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS0, LOW); //enable cs0
 	}
-	else // CsPin == 7 Chip Select 1
+	else            // CsPin == 7 Chip Select 1
 	{
 		cout << "Using CS1" << endl;
 		bcm2835_spi_chipSelect(BCM2835_SPI_CS1);
+		bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS1, LOW); //enable cs1
 	}
-	bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS1, LOW);     //enable cs0
 
     printf("/***********************************/ \r\n");
 	return 0;
